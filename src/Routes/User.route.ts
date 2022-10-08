@@ -1,12 +1,25 @@
 import { Router } from "express";
-import { getUser } from "../Controllers/Users.Controller";
-import { verifyToken } from "../Middleware/VerifyToken.Middleware";
+import {
+  deleteImage,
+  getUserByAccount,
+  getUserById,
+  getUsers,
+  updateUser,
+} from "../Controllers/Users.Controller";
+import verifyToken from "../Middleware/VerifyToken.Middleware";
 import TCWrapper from "../Utils/TCWrapper.Utils";
 
 const router = Router();
 
 router
-  .get("/api/users/:account", TCWrapper(getUser))
-  .post("/api/users", TCWrapper(verifyToken("0")), TCWrapper(getUser));
+  .get(
+    "/api/users/account",
+    TCWrapper(verifyToken("0")),
+    TCWrapper(getUserByAccount)
+  )
+  .get("/api/users/id", TCWrapper(verifyToken("0")), TCWrapper(getUserById))
+  .get("/api/users", TCWrapper(verifyToken("0")), TCWrapper(getUsers))
+  .delete("/api/users/image/:id", deleteImage)
+  .patch("/api/users/:id/", TCWrapper(updateUser));
 
 export default router;

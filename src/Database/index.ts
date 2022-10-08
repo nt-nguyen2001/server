@@ -8,6 +8,7 @@ export class DB {
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
     connectionLimit: 10,
+    multipleStatements: true,
   });
   private constructor() {}
   public static getInstance() {
@@ -19,6 +20,21 @@ export class DB {
   public _execute<T>(query: string, values?: any) {
     return new Promise<T[]>((resolve, reject) => {
       this.pool.execute<T[] & RowDataPacket[]>(
+        query,
+        values ?? [],
+        (err, rows) => {
+          if (err) {
+            reject(err);
+          }
+          const row = rows;
+          resolve(row);
+        }
+      );
+    });
+  }
+  public _query<T>(query: string, values?: any) {
+    return new Promise<T[]>((resolve, reject) => {
+      this.pool.query<T[] & RowDataPacket[]>(
         query,
         values ?? [],
         (err, rows) => {

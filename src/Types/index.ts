@@ -1,15 +1,19 @@
 import { Request } from "express";
 
-export interface User {
-  userID: string;
-  account: string;
-  userName: string;
-  password: string;
-  phoneNumber: string;
+export interface TUser {
+  _userId: string;
+  _account: string;
+  _name: string;
+  _userName: string;
+  _password: string;
+  _phoneNumber: string;
+  avatar: string;
+  background_img: string;
   role: string;
+  otp: string;
 }
-export interface RequestWithPayload extends Request {
-  payload?: Object[];
+export interface RequestWithPayload<T> extends Request {
+  payload?: T[];
 }
 export interface OTP {
   token: string;

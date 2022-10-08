@@ -1,16 +1,17 @@
-import express, { Application, NextFunction, Request, Response } from "express";
-import { route } from "./Routes";
+import cors from "cors";
 import "dotenv/config";
-import { ResponseError } from "./Utils/CustomThrowError.Utils";
-const cors = require("cors");
+import express, { Application } from "express";
+import { route } from "./Routes";
 const app: Application = express();
 const cookieParser = require("cookie-parser");
 
 app.use(express.json());
 app.use(cookieParser());
+const whitelist = ["http://localhost:3000"];
 app.use(
   cors({
     origin: "http://localhost:3000",
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     credentials: true,
   })
 );

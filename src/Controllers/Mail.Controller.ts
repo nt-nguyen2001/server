@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
 import { DB } from "../Database";
+import Mail from "../Database/mail.database";
 import { generateOTP } from "../Utils/GenerateOTP.Utils";
 import sendMail from "../Utils/SendMail.Utils";
 
-export function mailRegister(req: Request, res: Response) {
+export async function mailRegister(req: Request, res: Response) {
   const token = generateOTP(req.body.account);
-  const __instance = DB.getInstance();
-  __instance._execute("Insert into OTP values(?,?,?)", [
-    token,
-    req.body.account,
-    new Date(new Date().getTime() + 120000),
-  ]);
+  await Mail.CreateOTP(token, req.body.account);
   sendMail(req.body.account, `OTP: ${token}`);
   res.sendStatus(200);
 }

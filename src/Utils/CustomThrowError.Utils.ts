@@ -8,3 +8,4 @@ export class ResponseError extends Error {
     this.error = status;
   }
 }
+export type NewError = Error & { error: number };

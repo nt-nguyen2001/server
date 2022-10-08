@@ -1,7 +1,8 @@
 import jwt, { TokenExpiredError } from "jsonwebtoken";
+import { ResponseError } from "./CustomThrowError.Utils";
 
 interface payLoad {
-  id: string;
+  _userId: string;
   role: string;
   iat: number;
   exp: number;
@@ -15,6 +16,9 @@ export default async function VerifyToken(token: string) {
   };
   try {
     // type can't determined in callback of verify
+    if (token === null) {
+      throw new ResponseError("Bad Request!", 400);
+    }
     const decoded = (await jwt.verify(
       token,
       process.env.SECRET_KEY || "ASD"

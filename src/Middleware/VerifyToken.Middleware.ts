@@ -1,17 +1,22 @@
 import { NextFunction, Request, Response } from "express";
+import { RequestWithPayload } from "../Types";
 import { ResponseError } from "../Utils/CustomThrowError.Utils";
-import VerifyToken from "../Utils/VerifyToken.Utils";
+import VerifyTokenUtils from "../Utils/VerifyToken.Utils";
 
-export const verifyToken =
-  (role: string) => async (req: Request, res: Response, next: NextFunction) => {
+const VerifyToken =
+  (role: string) =>
+  async (
+    req: RequestWithPayload<Object>,
+    res: Response,
+    next: NextFunction
+  ) => {
     const token =
       (req.cookies.accessToken && req.cookies.accessToken.split(" ")[1]) ||
       null;
-    if (token !== null) {
-      const payload = await VerifyToken(token);
-      if (payload.decoded?.role === role) {
-        return next();
-      }
+    const payload = await VerifyTokenUtils(token);
+    if (payload.decoded?.role === role) {
+      req.payload = [payload.decoded];
+      return next();
     }
-    throw new ResponseError("Bad Request!", 400);
   };
+export default VerifyToken;

@@ -10,6 +10,7 @@ export class DB {
     connectionLimit: 10,
     multipleStatements: true,
   });
+  //?
   private constructor() {}
   public static getInstance() {
     if (this.__instance == null) {

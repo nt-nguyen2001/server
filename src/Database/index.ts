@@ -9,7 +9,7 @@ export class DB {
     database: process.env.DATABASE,
     connectionLimit: 10,
     multipleStatements: true,
-    pool: process.env.PORT,
+    pool: process.env.PORT || 5000,
   });
   //?
   private constructor() {}
